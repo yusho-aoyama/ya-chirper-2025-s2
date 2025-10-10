@@ -7,6 +7,8 @@ use App\Models\Chirp;
 use Illuminate\View\View;
 // Added the following after changing the update method
 use Illuminate\Http\Request;
+// Adding Gates
+use Illuminate\Support\Facades\Gate;
 
 
 class ChirpController extends Controller
@@ -77,6 +79,7 @@ class ChirpController extends Controller
      */
     public function edit(Chirp $chirp)
     {
+        Gate::authorize('update', $chirp);
         // return view('chirps.edit', compact(['chirp',]);
 
         // In the guide, the code is like the above, but it doesn't work properly and shows
@@ -91,6 +94,8 @@ class ChirpController extends Controller
      */
     public function update(Request $request, Chirp $chirp): RedirectResponse
     {
+        Gate::authorize('update', $chirp);
+
         $validated = $request->validate([
             'message' => [
                 'required',
@@ -110,6 +115,8 @@ class ChirpController extends Controller
      */
     public function destroy(Chirp $chirp)
     {
+        Gate::authorize('delete', $chirp);
+
         $chirp->delete();
         return redirect(route('chirps.index'));
     }
