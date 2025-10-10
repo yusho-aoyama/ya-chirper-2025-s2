@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use App\Models\Chirp;
-use App\Http\Requests\StoreChirpRequest;
-use App\Http\Requests\UpdateChirpRequest;
 use Illuminate\View\View;
+// Added the following after changing the update method
+use Illuminate\Http\Request;
 
 
 class ChirpController extends Controller
@@ -19,7 +19,9 @@ class ChirpController extends Controller
         // To collect all the chirps
         $chirps = Chirp::with('user')->latest()->get();
 
-        return view('chirps.index', compact(['chirps',]));
+        // return view('chirps.index', compact(['chirps',]));
+        return view('chirps.index')
+            ->with('chirps', $chirps);
     }
     /**
      * Show the form for creating a new resource.
@@ -35,7 +37,7 @@ class ChirpController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function store(StoreChirpRequest $request)
+    public function store(Request $request)
     {
         // Validates the content sent by the user, whilst only the message is stored in
         // the validated variable
@@ -64,18 +66,43 @@ class ChirpController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * This method uses Route-Model Binding
+     * The resourceful route definition means we use the edit method.
+     * If we wrote the route (in routes/web.php) by hand then it would be: route::get("chirps/{chirp}/edit", [ChirpController::class, 'edit'])->name('chirps.edit')
+     * The Chirp $chirp automatically calls "Eloquent" to find the Model (Chirp) that was requested
+     * The {chirp} is used as the "id" for Eloquent to perform the equivalent to: $chirp = Chirp::whereID($chirp)->get()
+     *
+     *
      */
     public function edit(Chirp $chirp)
     {
-        //
+        // return view('chirps.edit', compact(['chirp',]);
+
+        // In the guide, the code is like the above, but it doesn't work properly and shows
+        // an error, so I use the following code instead of it.
+
+        return view('chirps.edit')
+            ->with('chirp', $chirp);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChirpRequest $request, Chirp $chirp)
+    public function update(Request $request, Chirp $chirp): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'message' => [
+                'required',
+                'string',
+                'min:5',
+                'max:255',
+            ],
+        ]);
+
+        $chirp->update($validated);
+
+        return redirect(route('chirps.index'));
     }
 
     /**
@@ -83,6 +110,7 @@ class ChirpController extends Controller
      */
     public function destroy(Chirp $chirp)
     {
-        //
+        $chirp->delete();
+        return redirect(route('chirps.index'));
     }
 }

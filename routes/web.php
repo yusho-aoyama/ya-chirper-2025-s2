@@ -33,30 +33,30 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 });
+
+/**
+ * Table of the HTTP VERBs, the ENDPOINT URIs,
+ * CONTROLLER ACTIONs and the ROUTEs
+ * interpreted when using route('ROUTE_NAME')
+ * in code.
+ *
+ * | Verb       |  URI                       |  Action   |  Route Name          |
+ * |------------|----------------------------|-----------|----------------------|
+ * | GET        |  /chirps                   |  index    |  chirps.index        |
+ * | POST       |  /chirps                   |  store    |  chirps.store        |
+ * | GET        |  /chirps/{chirp}/edit      |  edit     |  chirps.edit         |
+ * | PUT/PATCH  |  /chirps/{chirp}           |  update   |  chirps.update       |
+ * | DELETE     |  /chirps/{chirp}           |  destroy  |  chirps.destroy      |
+ */
+
 // chirps に対して「一覧取得と投稿だけ許可し、認証済みユーザーのみがアクセスできるルート」を設定
 //  Laravel's router that we are looking for URIs with /chirps at the start of the URL after the domain name.
 // The resource section tells the router that it is to add routes for index, show, store, create, update, edit, and delete methods in the ChirpController class
 Route::resource('chirps', ChirpController::class)
-    // Laravel that we are ONLY going to react to the index and store methods
-    ->only(['index', 'store'])
+    // Laravel that we are ONLY going to react to the index, store, edit, update, and destroy methods
+    ->only(['index', 'store', 'edit', 'update', 'destroy',])
     // the router that the user must be authenticated and verified to be able to use these 'endpoints'.
     // ->middleware(['auth', 'verified']);
     ->middleware(['auth',]);
-/**
- * These lines have added the following routes:
- *
- * | Verb | URI       | Action | Route Name   |
- * | ---- | --------- | ------ | ------------ |
- * | GET  | '/chirps' | index  | chirps.index |
- * | POST | '/chirps' | store  | chirps.store |
- *
- *
- * ### Adding the Chirp Controller Use Line
- *
- * Go to the top of the web routes file and add the following line below the other `use` lines:
- */
-
-
-
 
 require __DIR__.'/auth.php';
