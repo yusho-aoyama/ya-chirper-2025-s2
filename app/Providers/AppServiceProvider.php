@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+// Add use lines
+use App\Events\ChirpCreated;
+use App\Listeners\SendChirpCreatedNotifications;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +16,13 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    protected $listen = [
+        ChirpCreated::class => [
+            SendChirpCreatedNotifications::class,
+        ],
+        // Other event listeners...
+    ];
 
     /**
      * Bootstrap any application services.
