@@ -1,81 +1,181 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('User Admin') }}
-        </h2>
+
+    <x-slot name="header" class="flex flex-row flex-between">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Users') }}
+        </h2>        <p><a href="{{ route('users.create') }}">New User</a></p>
     </x-slot>
 
-    <section class="py-4 mx-8 space-y-4 ">
-        <header>
-            <h3 class="text-2xl font-bold text-zinc-700">
-                Users
-            </h3>
-        </header>
-        <div class="flex flex-1 w-full max-h-min overflow-x-auto">
-            <table class="min-w-full divide-y-2 divide-gray-200 bg-gray-50">
-                <thead class="sticky top-0 bg-zinc-700 ltr:text-left rtl:text-right">
-                <tr class="*:font-medium *:text-white">
-                    <th class="px-3 py-2 whitespace-nowrap">User</th>
-                    <th class="px-3 py-2 whitespace-nowrap">Role</th>
-                    <th class="px-3 py-2 whitespace-nowrap">Status</th>
-                    <th class="px-3 py-2 whitespace-nowrap">Actions</th>
-                </tr>
-                </thead>
+    <div class="py-12">
 
-                <tbody class="divide-y divide-gray-200">
-                @foreach($users as $user)
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                    <tr class="*:text-gray-900 *:first:font-medium hover:bg-white">
-                        <td class="px-3 py-1 whitespace-nowrap flex flex-col min-w-1/3">
-                            <span class="">{{ $user->name }}</span>
-                            <span class="text-sm text-gray-500">{{ $user->email }}</span>
-                        </td>
-                        <td class="px-3 py-1 whitespace-nowrap w-auto">
-                            <span class="text-xs rounded-full bg-gray-700 p-0.5 px-2 text-gray-200">
-                                role
-                            </span>
-                        </td>
-                        <td class="px-3 py-1 whitespace-nowrap w-1/6">
-                            Suspended
-                        </td>
-                        <td class="px-3 py-1 whitespace-nowrap w-1/8">
-                            <form action="{{ route('admin.users', $user) }}"
-                                  method="post"
-                            class="grid grid-cols-3 gap-2 w-full">
+                <article class="my-0">
+
+                    <header class="grid grid-cols-10 bg-gray-500 text-gray-50 text-lg px-4 py-2">
+                        <span class="col-span-1">#</span>
+                        <span class="col-span-4">User</span>
+                        <span class="col-span-1">Added</span>
+                        <span class="col-span-1">Role</span>
+                        <span class="col-span-1">Actions</span>
+                    </header>
+
+                    @foreach ($users as $user)
+
+                        <section class="px-4 grid grid-cols-10 py-1 hover:bg-gray-100 border-b border-b-gray-300 transition duration-150">
+
+                            <p class="col-span-1">{{ $loop->index + 1 }}</p>
+
+                            <h5 class="flex flex-col col-span-4 text-gray-800">
+                                {{ $user->name }}
+                            </h5>
+
+                            <p class="text-xs text-gray-400 col-span-1 p-1">
+                                {{ $user->created_at->format('j M Y') }}
+                            </p>
+
+                            <p class="col-span-1">
+               <span class="text-xs bg-gray-800 text-gray-100 rounded-full px-2 py-0.5">
+                   Role
+               </span>
+                            </p>
+
+                            <!-- Only Admin and Staff access these options -->
+                            <form method="POST"
+                                  class="col-span-2 flex border border-gray-300 rounded-full px-0 overflow-hidden"
+                                  action="{{ route('users.destroy', $user) }}">
+
                                 @csrf
                                 @method('delete')
 
-                                <a href="{{ route('admin.users', $user) }}"
-                                   class="hover:text-green-500 transition border p-2 text-center rounded">
-                                    <i class="fa-solid fa-user-tag"></i>
+                                <a href="{{ route('users.show', $user) }}"
+                                   class="bg-gray-100 hover:bg-blue-500
+                text-blue-800 hover:text-gray-100 text-center
+                border-r border-r-gray-300
+                transition ease-in-out duration-300
+				grow px-2                                          rounded-l">
+                                    <i class="fa-solid fa-user text-sm"></i>
+                                    {{ __('Show') }}
                                 </a>
 
-                                <a href="{{ route('admin.users', $user) }}"
-                                   class="hover:text-blue-500 transition border p-2 text-center rounded">
-                                    <i class="fa-solid fa-user-cog"></i>
+                                <a href="{{ route('users.edit', $user) }}"
+                                   class="bg-gray-100 hover:bg-amber-500
+				text-amber-800 hover:text-gray-100  text-center
+				border-x border-x-gray-300
+				transition ease-in-out duration-300
+				grow px-2 ">
+                                    <i class="fa-solid fa-user-edit  text-sm"></i>
+                                    {{ __('Edit') }}
                                 </a>
-                                <button type="submit" class="hover:text-red-500 transition border p-2 text-center rounded">
-                                    <i class="fa-solid fa-user-slash"></i>
+
+                                <button type="submit"
+                                        class="bg-gray-100 hover:bg-red-500
+					 text-red-800 hover:text-gray-100 text-center
+					 border-l border-l-gray-300
+					 transition ease-in-out duration-300
+					 grow px-2                                          rounded-r ">
+                                    <i class="fa-solid fa-user-minus  text-sm"></i>
+                                    {{ __('Delete') }}
                                 </button>
+
                             </form>
-                        </td>
-                    </tr>
-                @endforeach
+                            <!-- /End Form -->
 
-                </tbody>
+                        </section>
+                    @endforeach
+                    <footer class="px-4 pb-2 pt-4 ">
+                        Pagination Navigation here
+                    </footer>
 
-                <tfoot>
-                <tr>
-                   <td colspan="4" class="p-3">
-                       {{ $users->onEachSide(2)->links("vendor.pagination.tailwind") }}
-                   </td>
-                </tr>
-                </tfoot>
-            </table>
+                </article>
+
+            </div>
         </div>
 
-
-    </section>
-
-
+    </div>
 </x-admin-layout>
+
+
+
+{{--<x-admin-layout>--}}
+{{--    <x-slot name="header">--}}
+{{--        <h2 class="font-semibold text-xl text-white leading-tight">--}}
+{{--            {{ __('User Admin') }}--}}
+{{--        </h2>--}}
+{{--    </x-slot>--}}
+
+{{--    <section class="py-4 mx-8 space-y-4 ">--}}
+{{--        <header>--}}
+{{--            <h3 class="text-2xl font-bold text-zinc-700">--}}
+{{--                Users--}}
+{{--            </h3>--}}
+{{--        </header>--}}
+{{--        <div class="flex flex-1 w-full max-h-min overflow-x-auto">--}}
+{{--            <table class="min-w-full divide-y-2 divide-gray-200 bg-gray-50">--}}
+{{--                <thead class="sticky top-0 bg-zinc-700 ltr:text-left rtl:text-right">--}}
+{{--                <tr class="*:font-medium *:text-white">--}}
+{{--                    <th class="px-3 py-2 whitespace-nowrap">User</th>--}}
+{{--                    <th class="px-3 py-2 whitespace-nowrap">Role</th>--}}
+{{--                    <th class="px-3 py-2 whitespace-nowrap">Status</th>--}}
+{{--                    <th class="px-3 py-2 whitespace-nowrap">Actions</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+
+{{--                <tbody class="divide-y divide-gray-200">--}}
+{{--                @foreach($users as $user)--}}
+
+{{--                    <tr class="*:text-gray-900 *:first:font-medium hover:bg-white">--}}
+{{--                        <td class="px-3 py-1 whitespace-nowrap flex flex-col min-w-1/3">--}}
+{{--                            <span class="">{{ $user->name }}</span>--}}
+{{--                            <span class="text-sm text-gray-500">{{ $user->email }}</span>--}}
+{{--                        </td>--}}
+{{--                        <td class="px-3 py-1 whitespace-nowrap w-auto">--}}
+{{--                            <span class="text-xs rounded-full bg-gray-700 p-0.5 px-2 text-gray-200">--}}
+{{--                                role--}}
+{{--                            </span>--}}
+{{--                        </td>--}}
+{{--                        <td class="px-3 py-1 whitespace-nowrap w-1/6">--}}
+{{--                            Suspended--}}
+{{--                        </td>--}}
+{{--                        <td class="px-3 py-1 whitespace-nowrap w-1/8">--}}
+{{--                            <form action="{{ route('admin.users', $user) }}"--}}
+{{--                                  method="post"--}}
+{{--                            class="grid grid-cols-3 gap-2 w-full">--}}
+{{--                                @csrf--}}
+{{--                                @method('delete')--}}
+
+{{--                                <a href="{{ route('admin.users', $user) }}"--}}
+{{--                                   class="hover:text-green-500 transition border p-2 text-center rounded">--}}
+{{--                                    <i class="fa-solid fa-user-tag"></i>--}}
+{{--                                </a>--}}
+
+{{--                                <a href="{{ route('admin.users', $user) }}"--}}
+{{--                                   class="hover:text-blue-500 transition border p-2 text-center rounded">--}}
+{{--                                    <i class="fa-solid fa-user-cog"></i>--}}
+{{--                                </a>--}}
+{{--                                <button type="submit" class="hover:text-red-500 transition border p-2 text-center rounded">--}}
+{{--                                    <i class="fa-solid fa-user-slash"></i>--}}
+{{--                                </button>--}}
+{{--                            </form>--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
+
+{{--                </tbody>--}}
+
+{{--                <tfoot>--}}
+{{--                <tr>--}}
+{{--                   <td colspan="4" class="p-3">--}}
+{{--                       {{ $users->onEachSide(2)->links("vendor.pagination.tailwind") }}--}}
+{{--                   </td>--}}
+{{--                </tr>--}}
+{{--                </tfoot>--}}
+{{--            </table>--}}
+{{--        </div>--}}
+
+
+{{--    </section>--}}
+
+
+{{--</x-admin-layout>--}}

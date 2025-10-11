@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticPageController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChirpController;
+
+// Add use lines
 
 Route::get('/', [StaticPageController::class, 'home'])
     ->name('home');
@@ -57,6 +60,11 @@ Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy',])
     // the router that the user must be authenticated and verified to be able to use these 'endpoints'.
     // ->middleware(['auth', 'verified']);
+    ->middleware(['auth',]);
+
+// Create User Resourcesful  Routes
+Route::resource('users',
+    UserManagementController::class)
     ->middleware(['auth',]);
 
 require __DIR__.'/auth.php';
