@@ -17,6 +17,25 @@ class Chirp extends Model
         'message',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     * (came from github.com)
+     *
+     * @var list<string>
+     */
+    protected $hidden = [];
+
+    /**
+     * Get the attributes that should be cast.
+     * (came from github.com)
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
+
     // Listen for this Model event and trigger the dispatch.
     protected $dispatchesEvents = [
         'created' => ChirpCreated::class,
@@ -29,6 +48,7 @@ class Chirp extends Model
      */
     public function user():BelongsTo
     {
+        // See the relationship btw user and chirp
         return $this->belongsTo(User::class);
     }
 

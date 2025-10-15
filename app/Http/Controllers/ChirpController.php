@@ -18,8 +18,17 @@ class ChirpController extends Controller
      */
     public function index(): View
     {
-        // To collect all the chirps
+        // To collect all the chirps in a variable
+        // Refering the chirp model
+        // Getting the user to connect to the chirps(?)
         $chirps = Chirp::with('user')->latest()->get();
+
+        // -------- Can use Filter to show the chirps --------
+//        $chirps = Chirp::with('user')
+//            // ->where('user_id', '=',auth()->id())
+//            ->whereUserId(auth()->id())
+//            ->latest()
+//            ->get();
 
         // return view('chirps.index', compact(['chirps',]));
         return view('chirps.index')
@@ -41,16 +50,28 @@ class ChirpController extends Controller
      */
     public function store(Request $request)
     {
+        // more info of the validations: https://laravel.com/docs/12.x/validation
+
         // Validates the content sent by the user, whilst only the message is stored in
         // the validated variable
         $validated = $request->validate([
-            'message' => 'required|string|max:255',
+            'message' => 'required|string|max:255|min:5',
+            'email' => 'required|email',
         ]);
 
-        // --- Array based ---
-        // $validated = $request->validate([
-        // 'message' => ['required', 'string', 'max:255',],
-        // ]);
+//         --- Array based ---
+//        $validated = $request->validate([
+//            'message' => [
+//                'required',
+//                'string',
+//                'max:255',
+//                'min:5',
+//            ],
+//            'email' => [
+//                'required',
+//                'email',
+//            ]
+//        ]);
 
         // Creates a chirp and associates it with the logged in user
         $request->user()->chirps()->create($validated);
@@ -87,6 +108,10 @@ class ChirpController extends Controller
 
         return view('chirps.edit')
             ->with('chirp', $chirp);
+
+//        PHP’s built-in compact function
+//        compact('chirp') creates an array with the variable name 'chirp' as the key and its value.
+//        return view('chirps.edit', compact((['chirp']) );
     }
 
     /**

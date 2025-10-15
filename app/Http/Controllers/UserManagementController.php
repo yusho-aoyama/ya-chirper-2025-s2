@@ -26,7 +26,9 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-        //
+        /// TODO: Update when we add Roles & Permissions
+        $roles = Collection::empty();
+        return view('users.create', compact(['roles',]));
     }
 
     /**
@@ -42,7 +44,8 @@ class UserManagementController extends Controller
      */
     public function show(User $user)
     {
-        //
+        // resources/views/users/show.blade.php
+        return view('admin.users.show', compact(['user']));
     }
 
     /**
