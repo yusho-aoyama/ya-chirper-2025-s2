@@ -52,7 +52,8 @@ Route::middleware('auth')->group(function () {
  * | DELETE     |  /chirps/{chirp}           |  destroy  |  chirps.destroy      |
  */
 
-// chirps に対して「一覧取得と投稿だけ許可し、認証済みユーザーのみがアクセスできるルート」を設定
+
+
 //  Laravel's router that we are looking for URIs with /chirps at the start of the URL after the domain name.
 // The resource section tells the router that it is to add routes for index, show, store, create, update, edit, and delete methods in the ChirpController class
 Route::resource('chirps', ChirpController::class)
@@ -63,8 +64,17 @@ Route::resource('chirps', ChirpController::class)
     ->middleware(['auth',]);
 
 // Create User Resourcesful  Routes
+// （index, create, store, show, edit, update, destroy)
 Route::resource('users',
     UserManagementController::class)
     ->middleware(['auth',]);
 
+// https://laravel.com/docs/12.x/routing
+Route::get('users/{user}/delete', [UserManagementController::class, 'delete'])
+    ->name('users.delete') // Need to change the name, 'users' is already used
+    ->middleware('auth');
+
 require __DIR__.'/auth.php';
+
+
+

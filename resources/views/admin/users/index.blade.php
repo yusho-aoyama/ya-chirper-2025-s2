@@ -69,7 +69,7 @@
                                     {{ __('Edit') }}
                                 </a>
 
-                                <button type="submit"
+                                <a href="{{ route('users.delete', $user) }}"
                                         class="bg-gray-100 hover:bg-red-500
 					 text-red-800 hover:text-gray-100 text-center
 					 border-l border-l-gray-300
@@ -77,7 +77,7 @@
 					 grow px-2                                          rounded-r ">
                                     <i class="fa-solid fa-user-minus  text-sm"></i>
                                     {{ __('Delete') }}
-                                </button>
+                                </a>
 
                             </form>
                             <!-- /End Form -->
