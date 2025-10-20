@@ -1,9 +1,38 @@
 <x-admin-layout>
 
-    <x-slot name="header" class="flex flex-row flex-between">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Users') }}
-        </h2>        <p><a href="{{ route('users.create') }}">New User</a></p>
+    <x-slot name="header">
+        <div class="flex flex-row justify-between w-full" >
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight grow">
+                {{ __('Users') }}
+            </h2>
+
+            <div class="flex flex-row items-center gap-2">
+                <a href="{{ route('users.create') }}"
+                   class="flex items-center gap-1 text-green-800 bg-gray-200 border
+                   border-gray-300 rounded-lg px-4 py-1 hover:bg-green-800 hover:text-white
+                   transition">
+                    <i class="fa-solid fa-user-plus"></i>
+                    New User
+                </a>
+
+                <form action="{{ route('users.index') }}" method="GET" class="flex flex-row gap-0">
+                    <x-text-input id="search"
+                                  type="text"
+                                  name="search"
+                                  class="border border-gray-200 rounded-r-none shadow-transparent"
+                                  :value="$search??''"
+                    />
+
+                    <button type="submit"
+                            class="flex items-center gap-1 text-green-800 bg-gray-200 border-gray-300
+                             rounded-lg px-4 py-1 rounded-l-none hover:bg-green-800 hover:text-white transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </x-slot>
 
     <div class="py-12">
@@ -54,7 +83,7 @@
                 text-blue-800 hover:text-gray-100 text-center
                 border-r border-r-gray-300
                 transition ease-in-out duration-300
-				grow px-2                                          rounded-l">
+				grow px-2 py-1.5 rounded-l">
                                     <i class="fa-solid fa-user text-sm"></i>
                                     {{ __('Show') }}
                                 </a>
@@ -64,7 +93,7 @@
 				text-amber-800 hover:text-gray-100  text-center
 				border-x border-x-gray-300
 				transition ease-in-out duration-300
-				grow px-2 ">
+				grow px-2 py-1.5">
                                     <i class="fa-solid fa-user-edit  text-sm"></i>
                                     {{ __('Edit') }}
                                 </a>
@@ -74,7 +103,7 @@
 					 text-red-800 hover:text-gray-100 text-center
 					 border-l border-l-gray-300
 					 transition ease-in-out duration-300
-					 grow px-2                                          rounded-r ">
+					 grow px-2 py-1.5 rounded-r ">
                                     <i class="fa-solid fa-user-minus  text-sm"></i>
                                     {{ __('Delete') }}
                                 </a>

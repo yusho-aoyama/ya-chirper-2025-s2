@@ -1,12 +1,38 @@
 <x-app-layout>
 
-    <x-slot name="header" class="flex flex-row flex-between">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Users') }}
-        </h2>
-        <p>
-            <a href="{{ route('users.create') }}">New User</a>
-        </p>
+    <x-slot name="header">
+        <div class="flex flex-row justify- w-full" >
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight grow">
+                {{ __('Users') }}
+            </h2>
+
+            <div class="flex flex-row items-center gap-2">
+                <a href="{{ route('users.create') }}"
+                   class="flex items-center gap-1 text-green-800 bg-gray-200 border
+                   border-gray-300 rounded-lg px-4 py-1 hover:bg-green-800 hover:text-white
+                   transition">
+                    <i class="fa-solid fa-user-plus"></i>
+                    New User
+                </a>
+
+                <form action="{{ route('users.index') }}" method="GET" class="flex flex-row gap-0">
+                    <x-text-input id="search"
+                                  type="text"
+                                  name="search"
+                                  class="border border-gray-200 rounded-r-none shadow-transparent"
+                                  :value="$search??''"
+                    />
+
+                    <button type="submit"
+                            class="flex items-center gap-1 text-green-800 bg-gray-200 border-gray-300
+                             rounded-lg px-4 py-1 rounded-l-none hover:bg-green-800 hover:text-white transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </x-slot>
 
     <div class="py-12">
