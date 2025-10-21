@@ -15,7 +15,8 @@
                     New User
                 </a>
 
-                <form action="{{ route('users.index') }}" method="GET" class="flex flex-row gap-0">
+                <form action="{{ route('users.index') }}" method="GET" class="flex
+                flex-row gap-1">
                     <x-text-input id="search"
                                   type="text"
                                   name="search"
@@ -114,7 +115,8 @@
                         </section>
                     @endforeach
                     <footer class="px-4 pb-2 pt-4 ">
-                        Pagination Navigation here
+                        {{ $users->onEachSide(2)->links("vendor.pagination.tailwind") }}
+                        <p>Total users: {{ $users->total() }}</p>
                     </footer>
 
                 </article>
