@@ -21,16 +21,19 @@ class UserManagementController extends Controller
      */
     public function index(Request $request)
     {
-        // Validation
+        // Validate the search input
         $validated = $request->validate([
             'search' => ['nullable', 'string',]
         ]);
         $search = $validated['search'] ?? '';
 
+        // Search + pagination + keep search query in URL
         $users = User::whereAny(
             ['name', 'email','position',], 'LIKE', "%$search%")
-            ->paginate(10); // This tells Laravel to have 10 users on each page
+            ->paginate(10)  // 10 users per page
+            ->appends(['search' => $search]);  // Append the search term to the URL
 
+        // Send data to the view
         return view('admin.users.index')
             ->with('users', $users)
             ->with('search', $search);
@@ -65,6 +68,8 @@ class UserManagementController extends Controller
                 'password' => ['required', 'confirmed', Password::defaults()],
                 'role'=>['nullable',],
             ]);
+
+
 
             $user = User::create([
                 'name' => $request->name,
