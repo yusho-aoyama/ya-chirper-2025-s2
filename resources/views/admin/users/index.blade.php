@@ -1,11 +1,15 @@
 <x-admin-layout>
-
     <x-slot name="header">
-        <div class="flex flex-row justify-between w-full" >
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight grow">
-                {{ __('Users') }}
-            </h2>
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            {{ __('User Admin') }}
+        </h2>
+    </x-slot>
 
+    <section class="py-4 mx-8 space-y-4 ">
+        <header class="flex flex-row justify-between w-full">
+            <h3 class="text-2xl font-bold text-zinc-700">
+                Users
+            </h3>
             <div class="flex flex-row items-center gap-2">
                 <a href="{{ route('users.create') }}"
                    class="flex items-center gap-1 text-green-800 bg-gray-200 border
@@ -32,45 +36,36 @@
                     </button>
                 </form>
             </div>
-        </div>
 
-    </x-slot>
+        </header>
+        <div class="flex flex-1 w-full max-h-min overflow-x-auto">
+            <table class="min-w-full divide-y-2 divide-gray-200 bg-gray-50">
+                <thead class="sticky top-0 bg-zinc-700 ltr:text-left rtl:text-right">
+                <tr class="*:font-medium *:text-white">
+                    <th class="px-3 py-2 whitespace-nowrap">User</th>
+                    <th class="px-3 py-2 whitespace-nowrap">Role</th>
+                    <th class="px-3 py-2 whitespace-nowrap">Status</th>
+                    <th class="px-3 py-2 whitespace-nowrap">Actions</th>
+                </tr>
+                </thead>
 
-    <div class="py-12">
+                <tbody class="divide-y divide-gray-200">
+                @foreach($users as $user)
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-
-                <article class="my-0">
-
-                    <header class="grid grid-cols-10 bg-gray-500 text-gray-50 text-lg px-4 py-2">
-                        <span class="col-span-1">#</span>
-                        <span class="col-span-4">User</span>
-                        <span class="col-span-1">Added</span>
-                        <span class="col-span-1">Role</span>
-                        <span class="col-span-1">Actions</span>
-                    </header>
-
-                    @foreach ($users as $user)
-
-                        <section class="px-4 grid grid-cols-10 py-1 hover:bg-gray-100 border-b border-b-gray-300 transition duration-150">
-
-                            <p class="col-span-1">{{ $loop->index + 1 }}</p>
-
-                            <h5 class="flex flex-col col-span-4 text-gray-800">
-                                {{ $user->name }}
-                            </h5>
-
-                            <p class="text-xs text-gray-400 col-span-1 p-1">
-                                {{ $user->created_at->format('j M Y') }}
-                            </p>
-
-                            <p class="col-span-1">
-               <span class="text-xs bg-gray-800 text-gray-100 rounded-full px-2 py-0.5">
-                   Role
-               </span>
-                            </p>
-
+                    <tr class="*:text-gray-900 *:first:font-medium hover:bg-white">
+                        <td class="px-3 py-1 whitespace-nowrap flex flex-col min-w-1/3">
+                            <span class="">{{ $user->name }}</span>
+                            <span class="text-sm text-gray-500">{{ $user->email }}</span>
+                        </td>
+                        <td class="px-3 py-1 whitespace-nowrap w-auto">
+                            <span class="text-xs rounded-full bg-gray-700 p-0.5 px-2 text-gray-200">
+                                role
+                            </span>
+                        </td>
+                        <td class="px-3 py-1 whitespace-nowrap w-1/6">
+                            Suspended
+                        </td>
+                        <td class="px-3 py-1 whitespace-nowrap w-1/8">
                             <!-- Only Admin and Staff access these options -->
                             <form method="POST"
                                   class="col-span-2 flex border border-gray-300 rounded-full px-0 overflow-hidden"
@@ -110,21 +105,26 @@
                                 </a>
 
                             </form>
-                            <!-- /End Form -->
+                        </td>
+                    </tr>
+                @endforeach
 
-                        </section>
-                    @endforeach
-                    <footer class="px-4 pb-2 pt-4 ">
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="p-3">
                         {{ $users->onEachSide(2)->links("vendor.pagination.tailwind") }}
-                        <p>Total users: {{ $users->total() }}</p>
-                    </footer>
-
-                </article>
-
-            </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
         </div>
 
-    </div>
+
+    </section>
+
+
 </x-admin-layout>
 
 
