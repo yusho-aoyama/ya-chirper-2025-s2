@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 // Adding Gates
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class ChirpController extends Controller
@@ -18,17 +19,18 @@ class ChirpController extends Controller
      */
     public function index(): View
     {
-        // To collect all the chirps in a variable
-        // Refering the chirp model
-        // Getting the user to connect to the chirps(?)
-        $chirps = Chirp::with('user')->latest()->get();
 
-        // -------- Can use Filter to show the chirps --------
-//        $chirps = Chirp::with('user')
-//            // ->where('user_id', '=',auth()->id())
-//            ->whereUserId(auth()->id())
-//            ->latest()
-//            ->get();
+        $chirps = Chirp::with('userVotes')
+            ->withCount([
+                'votes as likesCount'
+                => fn (Builder $query)
+                => $query->where('vote', '>', 0)], 'vote')
+            ->withCount([
+                'votes as dislikesCount'
+                => fn (Builder $query)
+                => $query->where('vote', '<', 0)], 'vote')
+            ->latest()
+            ->paginate();
 
         // return view('chirps.index', compact(['chirps',]));
         return view('chirps.index')

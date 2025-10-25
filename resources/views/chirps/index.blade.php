@@ -78,6 +78,9 @@
                         <p class="mt-4 text-lg text-gray-900">
                             {{ $chirp->message }}
                         </p>
+                        <div class="text-right">
+                            @livewire('like-dislike', [$chirp])
+                        </div>
                     </div>
 
                 </section>
